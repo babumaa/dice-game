@@ -2,7 +2,7 @@ var activePlayer;
 var scores;
 var roundScore;
 var diceNumber;
-
+var isNewGame;
 //Тоглоомыг эхлүүлнэ
 
 
@@ -11,6 +11,8 @@ var diceDom = document.querySelector('.dice')
 
 initGame();
 function initGame(){
+    isNewGame = true;
+
     //Тоглогчийн ээлжийг хадгалах хувьсагч нэгдүгээр тоглогчийг 0 хоёрдугаар тоглогчийг 1
  activePlayer = 0;
 
@@ -46,7 +48,8 @@ diceDom.style.display='none';
 }
 //Шоог шидэх эвент листенер
 document.querySelector(".btn-roll").addEventListener('click',function (){
-//1-6 доторх санамсаргүй нэг тоог гаргаж авна
+if(isNewGame ===true){
+    //1-6 доторх санамсаргүй нэг тоог гаргаж авна
 
     var diceNumber =Math.floor(Math.random() *6)+1;
 //Шооны зургийг веб дээр гаргаж ирнэ.
@@ -64,16 +67,21 @@ document.querySelector(".btn-roll").addEventListener('click',function (){
     else{
         switchToNextPlayer();
     }
+}
 });
 //HOLD товчны эвент листенор
 document.querySelector('.btn-hold').addEventListener('click', function(){
-//ээлжинд уг тоглогчийн цуглуулсан оноог глобал оноон дээр нь нэмж өгнө
+if(isNewGame === true){
+    
+    //ээлжинд уг тоглогчийн цуглуулсан оноог глобал оноон дээр нь нэмж өгнө
 
 scores[activePlayer] = scores[activePlayer] + roundScore;
 //дэлгэц дээр оноог өөрчилнө 
 document.getElementById('score-' + activePlayer).textContent = scores[activePlayer];
 //тоглогч хожсон эсэхийг шалгах
 if(scores[activePlayer] >=10){
+    isNewGame = false;
+
     //ялагч гэсэн бичиг нэрнийх нь оронд гаргана
     document.getElementById('name-' + activePlayer).textContent = 'WINNER!!!'
     document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
@@ -81,13 +89,8 @@ if(scores[activePlayer] >=10){
 }else{
     switchToNextPlayer();
 }
+}
 
-
-//ээлжийн оноог нь 0 болгоно
-
-//тоглогчийн ээлжийг сольно
-
-switchToNextPlayer();
 
 })
 // энэ функц нь тоглох ээлжийг шилжүүлнэ
